@@ -10,6 +10,7 @@ from .models import Artist
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+
 class ArtistDetailView(DetailView):
 	model = Artist
 	context_object_name = 'fav_artist'

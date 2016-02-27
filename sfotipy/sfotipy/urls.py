@@ -16,33 +16,42 @@ Including another URLconf
 from django.conf.urls import patterns,include,url
 from django.contrib import admin
 admin.autodiscover()
+
+
 from rest_framework import routers
 from artists.views import ArtistDetailView,ArtistListView
 from albums.views import AlbumDetailView,AlbumListView
+
 from tracks.views import TrackViewSet
 
 from artists.views import ArtistViewSet
 from albums.views import AlbumViewSet , UserViewSet
 
+#
+from django.conf.urls import url
+from rest_framework.urlpatterns import format_suffix_patterns
+from albums import views
 
 router = routers.DefaultRouter()
 router.register(r'albums', AlbumViewSet)
 router.register(r'artists', ArtistViewSet)
 router.register(r'tracks', TrackViewSet)
-router.register(r'user', UserViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     
    url(r'^admin/', include(admin.site.urls)),
    url(r'^tracks/(?P<title>[\w\-]+)/', 'tracks.views.track_view',name='track_view'),
-   #url(r'^artists/(?P<pk>[\d]+)',ArtistDetailView.as_view()),
-   #url(r'^artists/', ArtistListView.as_view()),
-        
+   url(r'^artists/(?P<pk>[\d]+)',ArtistDetailView.as_view()),
+   url(r'^artists/', ArtistListView.as_view()),
    url(r'^api/', include(router.urls)),
-   
-   #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+   url(r'^admin/',include(admin.site.urls)),
+   url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+   url(r'^users/$',views.Userlist),
+   url(r'^users/(?P<pk>[0-9]+)$', views.UserDetailView),
 ]
 
+#urlpatterns = format_suffix_patterns(urlpatterns)
 
 #urlpatterns = patterns('',
 #	url(r'^HelloWorld/',include('HelloWorld.urls')),
